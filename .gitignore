@@ -1,4 +1,15 @@
-myenv/
 __pycache__/
 *.pyc
-.vscode/
+
+.venv/
+venv/
+
+.env
+
+.ipynb_checkpoints/
+
+*.html
+
+.streamlit/
+
+.DS_Store

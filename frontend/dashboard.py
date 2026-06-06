@@ -33,7 +33,10 @@ if st.button("Compute Route"):
         )
 
         data = response.json()
+        if "error" in data:
+            st.error(data["error"])
 
+            st.stop()
         shortest_route = data["shortest_route"]
 
         traffic_route = data["traffic_aware_route"]
@@ -58,7 +61,33 @@ if st.button("Compute Route"):
 
             traffic_coordinates.append([lat, lon])
 
-        # create map
+        st.header("Route Comparison")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Shortest Route")
+
+            st.metric("Distance", f"{shortest_route['distance_meters'] / 1000:.2f} km")
+
+            st.metric("ETA", f"{shortest_route['eta_minutes']:.2f} min")
+
+            st.metric("Nodes", shortest_route["nodes"])
+        with col2:
+            st.subheader("Traffic-Aware Route")
+
+            st.metric("Distance", f"{traffic_route['distance_meters'] / 1000:.2f} km")
+
+            st.metric("ETA", f"{traffic_route['eta_minutes']:.2f} min")
+
+            st.metric("Nodes", traffic_route["nodes"])
+
+        st.header("Recommendation")
+        if traffic_route["eta_minutes"] < shortest_route["eta_minutes"]:
+            st.success("Traffic-Aware Route is Faster")
+
+        else:
+            st.success("Shortest Route is Faster")
+            # create map
         m = folium.Map(location=shortest_coordinates[0], zoom_start=13)
 
         # SHORTEST ROUTE

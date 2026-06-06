@@ -22,15 +22,16 @@ optimizer = RouteOptimizer(G)
 
 
 @router.get("/route")
+@router.get("/route")
 def get_route(
     origin_lat: float, origin_lon: float, destination_lat: float, destination_lon: float
 ):
 
-    origin = optimizer.coordinates_to_node(origin_lat, origin_lon)
+    origin_node = optimizer.coordinates_to_node(origin_lat, origin_lon)
 
-    destination = optimizer.coordinates_to_node(destination_lat, destination_lon)
+    destination_node = optimizer.coordinates_to_node(destination_lat, destination_lon)
 
-    route = optimizer.shortest_route(origin, destination)
+    route = optimizer.shortest_route(origin_node, destination_node)
 
     distance_route_coordinates = []
 
@@ -41,9 +42,11 @@ def get_route(
 
         distance_route_coordinates.append([lat, lon])
 
-    distance_route = ox.shortest_path(G, origin, destination, weight="length")
+    distance_route = ox.shortest_path(G, origin_node, destination_node, weight="length")
 
-    traffic_route = ox.shortest_path(G, origin, destination, weight="traffic_weight")
+    traffic_route = ox.shortest_path(
+        G, origin_node, destination_node, weight="traffic_weight"
+    )
     traffic_route_coordinates = []
 
     for node in traffic_route:
