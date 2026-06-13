@@ -6,15 +6,27 @@ from simulation.fleet_manager import create_fleet
 
 from visualization.fleet_visualization import visualize_fleet
 
-from utils.route_distance import route_distance
-
 from utils.fleet_metrics import (
     total_fleet_distance,
     average_route_distance,
     total_deliveries,
 )
+from utils.build_route_geometry import build_route_geometry
+import time
+from ml.real_eta_model import predict_eta
+from utils.traffic_metrics import average_route_traffic
+from algorithms.tsp import nearest_neighbor_tsp, route_cost
+import osmnx as ox
 
+from datetime import datetime
 
+from simulation.traffic_simulation import apply_traffic_to_graph
+
+hour = datetime.now().hour
+
+G = ox.graph_from_place("Ahmedabad, India", network_type="drive")
+
+G = apply_traffic_to_graph(G, hour)
 # -----------------------------------
 # STEP 1
 # Generate deliveries
@@ -53,18 +65,38 @@ print(f"Created {len(fleet)} vehicles")
 # -----------------------------------
 
 for vehicle in fleet:
-    # TEMPORARY
-    # Until TSP is integrated
+    deliveries = vehicle.deliveries
 
-    vehicle.route = vehicle.deliveries
+    if len(deliveries) < 2:
+        continue
 
-    vehicle.route_coordinates = []
+    start = deliveries[0]
 
-    for lat, lon in vehicle.route:
-        vehicle.route_coordinates.append([lat, lon])
+    start_time = time.time()
 
-    vehicle.total_distance = route_distance(vehicle.route)
+    optimized_route = nearest_neighbor_tsp(deliveries, start, G)
 
+    end_time = time.time()
+
+    print("TSP Time:", end_time - start_time, "seconds")
+
+    vehicle.route = optimized_route
+
+    vehicle.route_coordinates = build_route_geometry(G, optimized_route)
+
+    vehicle.total_distance = route_cost(optimized_route, G)
+
+    traffic_level = average_route_traffic(G, optimized_route)
+
+    distance_km = vehicle.total_distance / 1000
+
+    hour = datetime.now().hour
+
+    day_of_week = datetime.now().weekday()
+
+    eta_seconds = predict_eta(distance_km, hour, day_of_week, traffic_level)
+
+    vehicle.total_eta = eta_seconds / 60
 
 # -----------------------------------
 # STEP 5
@@ -80,7 +112,12 @@ for vehicle in fleet:
 
     print(f"Distance: {vehicle.total_distance:.4f}")
 
+    print(f"ETA: {vehicle.total_eta:.2f} minutes")
 
+    print(f"Stops: {len(vehicle.route) - 1}")
+
+    for stop in vehicle.route:
+        print(stop)
 # -----------------------------------
 # STEP 6
 # Fleet analytics
@@ -93,6 +130,8 @@ print("Total Fleet Distance:", total_fleet_distance(fleet))
 print("Average Route Distance:", average_route_distance(fleet))
 
 print("Total Deliveries:", total_deliveries(fleet))
+
+print("Route:")
 
 
 # -----------------------------------
