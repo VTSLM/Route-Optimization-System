@@ -388,9 +388,6 @@ The model predicts travel time for routes under varying traffic conditions.
 
 ---
 
-# Screenshots
-
-Add screenshots here after deployment.
 
 ## Route Comparison Dashboard
 
