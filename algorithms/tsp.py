@@ -1,4 +1,4 @@
-from algorithms.traffic_route_cost import traffic_route_distance
+from algorithms.traffic_route_cost import traffic_route_distance, road_distance_meters
 
 
 def nearest_neighbor_tsp(points, start, G):
@@ -32,6 +32,6 @@ def route_cost(route, G):
     total_cost = 0
 
     for i in range(len(route) - 1):
-        total_cost += traffic_route_distance(G, route[i], route[i + 1])
+        total_cost += road_distance_meters(G, route[i], route[i + 1])
 
     return total_cost
