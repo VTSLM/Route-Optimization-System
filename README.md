@@ -391,12 +391,12 @@ The model predicts travel time for routes under varying traffic conditions.
 
 ## Route Comparison Dashboard
 
-![Enter Coordinates](<Screenshot 2026-06-06 153341.png>)
-![Route Statistics](<Screenshot 2026-06-06 153354.png>)
-![Comparision](<Screenshot 2026-06-06 153412.png>)
+![Enter Coordinates](<images/Screenshot 2026-06-06 153341.png>)
+![Route Statistics](<images/Screenshot 2026-06-06 153354.png>)
+![Comparision](<images/Screenshot 2026-06-06 153412.png>)
 ## Fleet Dashboard
-![Select number of vehicles and points](<Screenshot 2026-06-06 153646.png>)
-![Route](<Screenshot 2026-06-06 153711.png>)
+![Select number of vehicles and points](<images/Screenshot 2026-06-06 153646.png>)
+![Route](<images/Screenshot 2026-07-01 164552.png>)
 
 
 ---
@@ -404,13 +404,5 @@ The model predicts travel time for routes under varying traffic conditions.
 # Author
 
 **Vatsal Mori**
-
-
-Interests:
-- Data Structures & Algorithms
-- Artificial Intelligence
-- Machine Learning
-- Optimization
-- Software Development
 
 ---

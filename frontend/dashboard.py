@@ -1,5 +1,12 @@
+import os
+import sys
+
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 import streamlit as st
-import requests
+from utils.route_service import compute_routes
 import folium
 
 from streamlit_folium import st_folium
@@ -22,17 +29,12 @@ destination_lon = st.number_input("Destination Longitude", value=72.5900)
 
 if st.button("Compute Route"):
     try:
-        response = requests.get(
-            "http://127.0.0.1:8000/route",
-            params={
-                "origin_lat": origin_lat,
-                "origin_lon": origin_lon,
-                "destination_lat": destination_lat,
-                "destination_lon": destination_lon,
-            },
+        data = compute_routes(
+            origin_lat,
+            origin_lon,
+            destination_lat,
+            destination_lon,
         )
-
-        data = response.json()
         if "error" in data:
             st.error(data["error"])
 
