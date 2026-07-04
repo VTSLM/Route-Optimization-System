@@ -62,9 +62,8 @@ Given multiple delivery locations, the system:
 
 - Real Road Network using OpenStreetMap
 - Dijkstra Shortest Path
-- A* Search
 - Traffic-Aware Routing
-- Dynamic Traffic Simulation
+- Traffic Simulation
 - ETA Prediction using Machine Learning
 - Route Comparison Dashboard
 - Interactive Route Visualization
@@ -346,7 +345,6 @@ The trained model predicts the estimated travel time for newly generated routes.
 ## Graph Algorithms
 
 - Dijkstra's Algorithm
-- A* Search Algorithm
 
 ## Optimization Algorithms
 
